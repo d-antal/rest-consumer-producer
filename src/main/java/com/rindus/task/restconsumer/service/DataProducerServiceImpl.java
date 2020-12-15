@@ -21,11 +21,15 @@ import com.rindus.task.restconsumer.model.Post;
 @Service
 public class DataProducerServiceImpl implements DataProducerService {
 
-	@Autowired
 	private PostService postService;
 
-	@Autowired
 	private CommentService commentService;
+
+	@Autowired
+	public DataProducerServiceImpl(PostService postService, CommentService commentService) {
+		this.postService = postService;
+		this.commentService = commentService;
+	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataProducerService.class);
 
@@ -51,7 +55,7 @@ public class DataProducerServiceImpl implements DataProducerService {
 			}
 		} catch (Exception e) {
 			LOGGER.error(DataProducerConstants.CONCURENT_PROCESS_DATA_ERROR, e);
-			throw new ConcurentCallException(e.getMessage());
+			throw new ConcurentCallException(DataProducerConstants.CONCURENT_PROCESS_DATA_ERROR);
 		}
 		executor.shutdown();
 		return postList;

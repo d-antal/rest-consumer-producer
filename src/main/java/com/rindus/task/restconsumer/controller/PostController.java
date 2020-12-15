@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,15 +15,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rindus.task.restconsumer.exception.ResourceNotFoundException;
 import com.rindus.task.restconsumer.model.Post;
-import com.rindus.task.restconsumer.service.PostServiceImpl;
+import com.rindus.task.restconsumer.service.PostService;
 
 @RestController
 @RequestMapping({ "/posts" })
 public class PostController {
 
-	@Autowired
-	private PostServiceImpl postService;
+	private PostService postService;
+
+	public PostController(PostService postService) {
+		this.postService = postService;
+	}
 
 	@GetMapping()
 	public List<Post> getAllPost() {
@@ -32,7 +35,7 @@ public class PostController {
 	}
 
 	@GetMapping(path = "/{postId}")
-	public Post getPostById(@PathVariable(value = "postId") Integer postId) {
+	public Post getPostById(@PathVariable(value = "postId") Integer postId) throws ResourceNotFoundException {
 		return postService.getPostById(postId);
 	}
 
@@ -43,12 +46,12 @@ public class PostController {
 	}
 
 	@PutMapping(path = "/{postId}")
-	public Post updatePost(@PathVariable(value = "postId") Integer postId, @Valid @RequestBody Post post) {
+	public Post updatePost(@PathVariable(value = "postId") Integer postId, @Valid @RequestBody Post post) throws ResourceNotFoundException {
 		return postService.updatePost(postId, post);
 	}
 
 	@DeleteMapping(path = "/{postId}")
-	public void deletePost(@PathVariable(value = "postId") Integer postId) {
+	public void deletePost(@PathVariable(value = "postId") Integer postId) throws ResourceNotFoundException {
 		postService.deletePost(postId);
 	}
 
