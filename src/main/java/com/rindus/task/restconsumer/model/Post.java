@@ -1,12 +1,19 @@
 package com.rindus.task.restconsumer.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Data
+
 @EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Post extends BaseFields {
-	private Long userId;
+	private Integer userId;
 	private String title;
 }
 

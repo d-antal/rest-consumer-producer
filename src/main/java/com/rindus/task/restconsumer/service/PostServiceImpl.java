@@ -6,7 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,21 +13,15 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.rindus.task.restconsumer.exception.ApiResponseErrorHandler;
 import com.rindus.task.restconsumer.exception.ResourceNotFoundException;
-
 import com.rindus.task.restconsumer.model.DataProducerConstants;
 import com.rindus.task.restconsumer.model.Post;
 
 @Service
 public class PostServiceImpl implements PostService {
 
-	private RestTemplate restTemplate;
-
 	@Autowired
-	public PostServiceImpl(RestTemplateBuilder restTemplateBuilder) {
-		restTemplate = restTemplateBuilder.errorHandler(new ApiResponseErrorHandler()).build();
-	}
+	private RestTemplate restTemplate;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PostServiceImpl.class);
 	private final static String BASE_URI_POST = "https://jsonplaceholder.typicode.com/posts/";
@@ -59,10 +52,12 @@ public class PostServiceImpl implements PostService {
 
 	}
 
-	public void deletePost(Integer id) throws ResourceNotFoundException {
+	public Integer deletePost(Integer id) throws ResourceNotFoundException {
 		getPostById(id);
-		restTemplate.exchange(BASE_URI_POST + id, HttpMethod.DELETE, new HttpEntity<String>(createHeader()), Post.class).getBody();
-		LOGGER.info(DataProducerConstants.RESOURCE_DELETED + id);
+		Integer deletePostId = restTemplate.exchange(BASE_URI_POST + id, HttpMethod.DELETE, new HttpEntity<String>(createHeader()), Post.class).getBody().getId();
+		LOGGER.info(DataProducerConstants.RESOURCE_DELETED + deletePostId);
+		return deletePostId;
+
 	}
 
 	private HttpHeaders createHeader() {

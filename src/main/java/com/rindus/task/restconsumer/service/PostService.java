@@ -15,5 +15,5 @@ public interface PostService {
 
 	Post updatePost(Integer id, Post post) throws ResourceNotFoundException;
 
-	void deletePost(Integer id) throws ResourceNotFoundException;
+	Integer deletePost(Integer id) throws ResourceNotFoundException;
 }
