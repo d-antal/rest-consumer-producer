@@ -46,14 +46,14 @@ public class PostServiceImpl implements PostService {
 	}
 
 	public Post updatePost(Integer id, Post post) throws ResourceNotFoundException {
-		getPostById(id);
+		this.getPostById(id);
 		LOGGER.info(DataProducerConstants.UPDATE_RESOURCE_BY_ID + id);
 		return restTemplate.exchange(BASE_URI_POST + id, HttpMethod.PUT, new HttpEntity<Post>(post, createHeader()), Post.class).getBody();
 
 	}
 
 	public Integer deletePost(Integer id) throws ResourceNotFoundException {
-		getPostById(id);
+		this.getPostById(id);
 		Integer deletePostId = restTemplate.exchange(BASE_URI_POST + id, HttpMethod.DELETE, new HttpEntity<String>(createHeader()), Post.class).getBody().getId();
 		LOGGER.info(DataProducerConstants.RESOURCE_DELETED + id);
 		return deletePostId;

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
+import com.rindus.task.restconsumer.controller.PostController;
 import com.rindus.task.restconsumer.service.CommentService;
 import com.rindus.task.restconsumer.service.CommentServiceImpl;
 import com.rindus.task.restconsumer.service.DataProducerService;
@@ -34,4 +35,5 @@ public class TestConfiguration {
 	public DataProducerService dataProducerService() {
 		return new DataProducerServiceImpl(postService(), commentService());
 	}
+
 }

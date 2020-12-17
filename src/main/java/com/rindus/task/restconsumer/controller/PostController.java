@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,12 +23,9 @@ import com.rindus.task.restconsumer.service.PostService;
 @RestController
 @RequestMapping({ "/posts" })
 public class PostController {
-
+   
+	@Autowired
 	private PostService postService;
-
-	public PostController(PostService postService) {
-		this.postService = postService;
-	}
 
 	@GetMapping()
 	public List<Post> getAllPost() {
