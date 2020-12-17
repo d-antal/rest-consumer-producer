@@ -25,6 +25,8 @@ public class DataProducerServiceImpl implements DataProducerService {
 
 	private CommentService commentService;
 
+	private ExecutorService executorService;
+
 	@Autowired
 	public DataProducerServiceImpl(PostService postService, CommentService commentService) {
 		this.postService = postService;
@@ -34,8 +36,9 @@ public class DataProducerServiceImpl implements DataProducerService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataProducerService.class);
 
 	public List<? extends BaseFields> produceJsonData(List<Integer> idList, BaseFields input) throws ConcurentCallException {
+		startConcurentProcesss(idList.size());
 		AtomicInteger start = new AtomicInteger(0);
-		ExecutorService executor = Executors.newFixedThreadPool(idList.size());
+
 		List<Callable<BaseFields>> callableList = new ArrayList<>();
 
 		Callable<BaseFields> callableTask = () -> {
@@ -49,7 +52,7 @@ public class DataProducerServiceImpl implements DataProducerService {
 
 		List<BaseFields> postList = new ArrayList<BaseFields>();
 		try {
-			List<Future<BaseFields>> futures = executor.invokeAll(callableList);
+			List<Future<BaseFields>> futures = executorService.invokeAll(callableList);
 			for (Future<BaseFields> future : futures) {
 				postList.add(future.get());
 			}
@@ -57,8 +60,18 @@ public class DataProducerServiceImpl implements DataProducerService {
 			LOGGER.error(DataProducerConstants.CONCURENT_PROCESS_DATA_ERROR, e);
 			throw new ConcurentCallException(DataProducerConstants.CONCURENT_PROCESS_DATA_ERROR);
 		}
-		executor.shutdown();
+		stopConcurentProcesss();
 		return postList;
+	}
+
+	public void startConcurentProcesss(int threads) {
+		executorService = Executors.newFixedThreadPool(threads);
+		LOGGER.info(DataProducerConstants.EXECUTOR_SERVICE_STARTED);
+	}
+
+	public void stopConcurentProcesss() {
+		executorService.shutdown();
+		LOGGER.info(DataProducerConstants.EXECUTOR_SERVICE_STOPPED);
 	}
 
 }

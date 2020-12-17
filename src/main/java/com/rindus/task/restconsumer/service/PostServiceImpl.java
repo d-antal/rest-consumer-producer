@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
 	public Integer deletePost(Integer id) throws ResourceNotFoundException {
 		getPostById(id);
 		Integer deletePostId = restTemplate.exchange(BASE_URI_POST + id, HttpMethod.DELETE, new HttpEntity<String>(createHeader()), Post.class).getBody().getId();
-		LOGGER.info(DataProducerConstants.RESOURCE_DELETED + deletePostId);
+		LOGGER.info(DataProducerConstants.RESOURCE_DELETED + id);
 		return deletePostId;
 
 	}

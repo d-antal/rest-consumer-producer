@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -47,7 +47,7 @@ public class PostServiceTest {
 	@Test
 	public void testGetPosts() {
 		Post[] postArray = { POST };
-		Mockito.when(restTemplate.exchange(BASE_URI_POST, HttpMethod.GET, STRING_ENTITY, Post[].class)).thenReturn(new ResponseEntity<Post[]>(postArray, HttpStatus.OK));
+		when(restTemplate.exchange(BASE_URI_POST, HttpMethod.GET, STRING_ENTITY, Post[].class)).thenReturn(new ResponseEntity<Post[]>(postArray, HttpStatus.OK));
 
 		List<Post> createdList = postService.getPosts();
 
@@ -58,7 +58,7 @@ public class PostServiceTest {
 
 	@Test
 	public void testGetPostById() {
-		Mockito.when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.GET, STRING_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.OK));
+		when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.GET, STRING_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.OK));
 
 		Post post = postService.getPostById(ID);
 
@@ -69,7 +69,7 @@ public class PostServiceTest {
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void testGetPostByIdWhenPostNotExists() {
-		Mockito.when(restTemplate.exchange(BASE_URI_POST + ID_NOT_EXISTS, HttpMethod.GET, STRING_ENTITY, Post.class)).thenThrow(ResourceNotFoundException.class);
+		when(restTemplate.exchange(BASE_URI_POST + ID_NOT_EXISTS, HttpMethod.GET, STRING_ENTITY, Post.class)).thenThrow(ResourceNotFoundException.class);
 
 		postService.getPostById(ID_NOT_EXISTS);
 
@@ -79,7 +79,7 @@ public class PostServiceTest {
 
 	@Test
 	public void testCreatePost() {
-		Mockito.when(restTemplate.exchange(BASE_URI_POST, HttpMethod.POST, POST_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.CREATED));
+		when(restTemplate.exchange(BASE_URI_POST, HttpMethod.POST, POST_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.CREATED));
 
 		Post post = postService.createPost(POST);
 
@@ -90,8 +90,8 @@ public class PostServiceTest {
 
 	@Test
 	public void testUpdatePostWhenPostExists() {
-		Mockito.when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.GET, STRING_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.OK));
-		Mockito.when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.PUT, POST_ENTITY_UPDATE, Post.class)).thenReturn(new ResponseEntity<Post>(UPDATE_POST, HttpStatus.OK));
+		when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.GET, STRING_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.OK));
+		when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.PUT, POST_ENTITY_UPDATE, Post.class)).thenReturn(new ResponseEntity<Post>(UPDATE_POST, HttpStatus.OK));
 
 		Post post = postService.updatePost(ID, UPDATE_POST);
 
@@ -103,7 +103,7 @@ public class PostServiceTest {
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void testUpdatePostWhenPostNotExists() {
-		Mockito.when(restTemplate.exchange(BASE_URI_POST + ID_NOT_EXISTS, HttpMethod.GET, STRING_ENTITY, Post.class)).thenThrow(ResourceNotFoundException.class);
+		when(restTemplate.exchange(BASE_URI_POST + ID_NOT_EXISTS, HttpMethod.GET, STRING_ENTITY, Post.class)).thenThrow(ResourceNotFoundException.class);
 
 		postService.updatePost(ID_NOT_EXISTS, UPDATE_POST);
 
@@ -113,8 +113,8 @@ public class PostServiceTest {
 
 	@Test
 	public void testDeletePostWhenPostExists() {
-		Mockito.when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.GET, STRING_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.OK));
-		Mockito.when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.DELETE, STRING_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.OK));
+		when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.GET, STRING_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.OK));
+		when(restTemplate.exchange(BASE_URI_POST + ID, HttpMethod.DELETE, STRING_ENTITY, Post.class)).thenReturn(new ResponseEntity<Post>(POST, HttpStatus.OK));
 
 		Integer deletePostId = postService.deletePost(ID);
 
@@ -126,7 +126,7 @@ public class PostServiceTest {
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void testDeletePostWhenPostNotExists() {
-		Mockito.when(restTemplate.exchange(BASE_URI_POST + ID_NOT_EXISTS, HttpMethod.GET, STRING_ENTITY, Post.class)).thenThrow(ResourceNotFoundException.class);
+		when(restTemplate.exchange(BASE_URI_POST + ID_NOT_EXISTS, HttpMethod.GET, STRING_ENTITY, Post.class)).thenThrow(ResourceNotFoundException.class);
 
 		postService.deletePost(ID_NOT_EXISTS);
 
