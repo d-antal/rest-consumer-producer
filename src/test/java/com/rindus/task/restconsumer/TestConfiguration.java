@@ -35,11 +35,4 @@ public class TestConfiguration {
 	public DataProducerService dataProducerService() {
 		return new DataProducerServiceImpl(postService(), commentService());
 	}
-
-	@Bean
-	@Primary
-	public RestTemplate testRestTemplate() {
-		return Mockito.mock(RestTemplate.class);
-	}
-
 }
