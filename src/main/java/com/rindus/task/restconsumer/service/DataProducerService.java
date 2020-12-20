@@ -9,7 +9,4 @@ public interface DataProducerService {
 
 	List<? extends BaseFields> produceJsonData(List<Integer> idList, BaseFields input) throws ConcurentCallException;
 
-	void startConcurentProcesss(int threads);
-
-	void stopConcurentProcesss();
 }

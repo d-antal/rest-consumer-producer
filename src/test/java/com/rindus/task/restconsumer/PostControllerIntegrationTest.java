@@ -21,30 +21,30 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rindus.task.restconsumer.model.Post;
-import com.rindus.task.restconsumer.service.PostServiceImpl;
+import com.rindus.task.restconsumer.service.PostService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class PostControllerIntegrationTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
-	@MockBean
-	private PostServiceImpl postService;
+	@Autowired
+	private PostService postService;
 
 	private static final ObjectMapper OM = new ObjectMapper();
-	private final static String BASE_URI_POST = "https://jsonplaceholder.typicode.com/posts/";
+	private final static String BASE_URI_POST = "http://localhost:8080/posts/";
 	private final static Integer ID = 1;
 	private final static Integer ID_2 = 1;
 	private final static Post POST = Post.builder().id(ID).body("test body").userId(ID).title("test title").build();
@@ -60,8 +60,10 @@ public class PostControllerIntegrationTest {
 	public void testGetPostById() throws Exception {
 		when(postService.getPostById(ID)).thenReturn(POST);
 
-		mockMvc.perform(get(BASE_URI_POST + ID).content(OM.writeValueAsString(POST)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$.body", is(POST.getBody()))).andExpect(jsonPath("$.id", is(ID))).andExpect(jsonPath("$.userId", is(POST.getUserId())))
+		mockMvc.perform(get(BASE_URI_POST + ID).content(OM.writeValueAsString(POST)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+		  		.andExpect(status().isOk())
+				.andExpect(jsonPath("$.body", is(POST.getBody()))).andExpect(jsonPath("$.id", is(ID)))
+				.andExpect(jsonPath("$.userId", is(POST.getUserId())))
 				.andExpect(jsonPath("$.title", is(POST.getTitle())));
 
 		verify(postService, times(1)).getPostById(ID);
@@ -71,10 +73,15 @@ public class PostControllerIntegrationTest {
 	public void testGetPosts() throws Exception {
 		when(postService.getPosts()).thenReturn(POST_LIST);
 
-		mockMvc.perform(get(BASE_URI_POST).content(OM.writeValueAsString(POST_LIST)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].body", is(POST.getBody()))).andExpect(jsonPath("$[0].id", is(ID))).andExpect(jsonPath("$[0].userId", is(POST.getUserId())))
-				.andExpect(jsonPath("$[0].title", is(POST.getTitle()))).andExpect(jsonPath("$[1].body", is(POST_2.getBody()))).andExpect(jsonPath("$[1].id", is(ID_2)))
-				.andExpect(jsonPath("$[1].userId", is(POST_2.getUserId()))).andExpect(jsonPath("$[1].title", is(POST_2.getTitle())));
+		mockMvc.perform(get(BASE_URI_POST).content(OM.writeValueAsString(POST_LIST)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].body", is(POST.getBody())))
+				.andExpect(jsonPath("$[0].id", is(ID)))
+				.andExpect(jsonPath("$[0].userId", is(POST.getUserId())))
+				.andExpect(jsonPath("$[0].title", is(POST.getTitle())))
+				.andExpect(jsonPath("$[1].body", is(POST_2.getBody()))).andExpect(jsonPath("$[1].id", is(ID_2)))
+				.andExpect(jsonPath("$[1].userId", is(POST_2.getUserId())))
+				.andExpect(jsonPath("$[1].title", is(POST_2.getTitle())));
 
 		verify(postService, times(1)).getPosts();
 	}
@@ -95,8 +102,10 @@ public class PostControllerIntegrationTest {
 		when(postService.getPostById(ID)).thenReturn(POST);
 		when(postService.updatePost(ID, POST_2)).thenReturn(POST_2);
 
-		mockMvc.perform(put(BASE_URI_POST + ID).content(OM.writeValueAsString(POST_2)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$.body", is(POST_2.getBody()))).andExpect(jsonPath("$.id", is(POST_2.getId()))).andExpect(jsonPath("$.userId", is(POST_2.getUserId())))
+		mockMvc.perform(put(BASE_URI_POST + ID).content(OM.writeValueAsString(POST_2)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.body", is(POST_2.getBody()))).andExpect(jsonPath("$.id", is(POST_2.getId())))
+				.andExpect(jsonPath("$.userId", is(POST_2.getUserId())))
 				.andExpect(jsonPath("$.title", is(POST_2.getTitle())));
 
 		verify(postService, times(1)).updatePost(ID, POST_2);
@@ -108,16 +117,9 @@ public class PostControllerIntegrationTest {
 		when(postService.deletePost(ID)).thenReturn(ID);
 
 		mockMvc.perform(delete(BASE_URI_POST + ID).content(OM.writeValueAsString(ID)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk());
+				.andExpect(status().isOk());
 
 		verify(postService, times(1)).deletePost(ID);
-	}
-
-	private static HttpHeaders createHeader() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		return headers;
 	}
 
 }

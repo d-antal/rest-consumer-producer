@@ -23,9 +23,13 @@ import com.rindus.task.restconsumer.service.PostService;
 @RestController
 @RequestMapping({ "/posts" })
 public class PostController {
-   
-	@Autowired
+
 	private PostService postService;
+
+	@Autowired
+	public PostController(PostService postService) {
+		this.postService = postService;
+	}
 
 	@GetMapping()
 	public List<Post> getAllPost() {

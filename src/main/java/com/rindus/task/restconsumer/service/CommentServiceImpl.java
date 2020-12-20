@@ -20,10 +20,10 @@ public class CommentServiceImpl implements CommentService {
 
 	@Autowired
 	private RestTemplate restTemplate;
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(PostServiceImpl.class);
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(PostServiceImpl.class);
 	private final static String BASE_URI_COMMENT = "https://jsonplaceholder.typicode.com/comments/";
-	
+
 	@Override
 	public Comment getCommentById(Integer id) {
 		Comment commentById = restTemplate.exchange(BASE_URI_COMMENT + id, HttpMethod.GET, new HttpEntity<String>(createHeader()), Comment.class).getBody();

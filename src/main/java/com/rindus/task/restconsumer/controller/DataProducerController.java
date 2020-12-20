@@ -21,8 +21,12 @@ import com.rindus.task.restconsumer.service.DataProducerService;
 @RequestMapping({ "/data" })
 public class DataProducerController {
 
-	@Autowired
 	private DataProducerService dataProducerService;
+
+	@Autowired
+	public DataProducerController(DataProducerService dataProducerService) {
+		this.dataProducerService = dataProducerService;
+	}
 
 	@PostMapping(path = "/posts/comments", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ConsumedData getPostsWithComments(@Valid @RequestBody List<Integer> idList) throws ConcurentCallException {
@@ -37,4 +41,3 @@ public class DataProducerController {
 		return consumedData;
 	}
 }
-

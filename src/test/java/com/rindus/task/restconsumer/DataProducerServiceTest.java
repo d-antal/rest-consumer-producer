@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,16 +41,6 @@ public class DataProducerServiceTest {
 	private final static List<Integer> ID_LIST = Arrays.asList(0, 1, 2, 3, 4);
 	private final static List<Post> POST_lIST = createPostList();
 	private final static List<Comment> COMMENT_LIST = createCommentList();
-
-	@Before
-	public void setUp() throws Exception {
-		dataProducerService.startConcurentProcesss(ID_LIST.size());
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		dataProducerService.stopConcurentProcesss();
-	}
 
 	@Test
 	public void testProductJsonDataWhenPost() throws ConcurentCallException {

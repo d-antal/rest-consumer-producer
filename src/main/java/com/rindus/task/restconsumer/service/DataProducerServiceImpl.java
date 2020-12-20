@@ -36,7 +36,7 @@ public class DataProducerServiceImpl implements DataProducerService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataProducerService.class);
 
 	public List<? extends BaseFields> produceJsonData(List<Integer> idList, BaseFields input) throws ConcurentCallException {
-		startConcurentProcesss(idList.size());
+		startConcurentProcess(idList.size());
 		AtomicInteger start = new AtomicInteger(0);
 
 		List<Callable<BaseFields>> callableList = new ArrayList<>();
@@ -60,16 +60,16 @@ public class DataProducerServiceImpl implements DataProducerService {
 			LOGGER.error(DataProducerConstants.CONCURENT_PROCESS_DATA_ERROR, e);
 			throw new ConcurentCallException(DataProducerConstants.CONCURENT_PROCESS_DATA_ERROR);
 		}
-		stopConcurentProcesss();
+		stopConcurentProcess();
 		return postList;
 	}
 
-	public void startConcurentProcesss(int threads) {
+	private void startConcurentProcess(int threads) {
 		executorService = Executors.newFixedThreadPool(threads);
 		LOGGER.info(DataProducerConstants.EXECUTOR_SERVICE_STARTED);
 	}
 
-	public void stopConcurentProcesss() {
+	private void stopConcurentProcess() {
 		executorService.shutdown();
 		LOGGER.info(DataProducerConstants.EXECUTOR_SERVICE_STOPPED);
 	}

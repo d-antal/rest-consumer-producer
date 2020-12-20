@@ -41,7 +41,7 @@ public class PostServiceErrorHandlingTest {
 	private RestTemplate restTemplate;
 
 	private final static Integer ID_NOT_EXISTS = 1234567;
-	private final static String BASE_URI_POST = "https://jsonplaceholder.typicode.com/posts/";
+	private final static String REMOTE_API_POST_URI = "https://jsonplaceholder.typicode.com/posts/";
 	private final static HttpEntity<String> STRING_ENTITY = new HttpEntity<String>(createHeader());
 
 	@Before
@@ -51,9 +51,9 @@ public class PostServiceErrorHandlingTest {
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void testGetPostByIdErrorHandlingWhenPostNotExists() {
-		this.server.expect(ExpectedCount.once(), requestTo(BASE_URI_POST + ID_NOT_EXISTS)).andExpect(method(HttpMethod.GET)).andRespond(withStatus(HttpStatus.NOT_FOUND));
+		this.server.expect(ExpectedCount.once(), requestTo(REMOTE_API_POST_URI + ID_NOT_EXISTS)).andExpect(method(HttpMethod.GET)).andRespond(withStatus(HttpStatus.NOT_FOUND));
 
-		restTemplate.exchange(BASE_URI_POST + ID_NOT_EXISTS, HttpMethod.GET, STRING_ENTITY, Post.class).getBody();
+		restTemplate.exchange(REMOTE_API_POST_URI + ID_NOT_EXISTS, HttpMethod.GET, STRING_ENTITY, Post.class).getBody();
 		this.server.verify();
 	}
 

@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.client.RestTemplate;
 
-import com.rindus.task.restconsumer.controller.PostController;
 import com.rindus.task.restconsumer.service.CommentService;
 import com.rindus.task.restconsumer.service.CommentServiceImpl;
 import com.rindus.task.restconsumer.service.DataProducerService;
@@ -34,6 +34,12 @@ public class TestConfiguration {
 	@Primary
 	public DataProducerService dataProducerService() {
 		return new DataProducerServiceImpl(postService(), commentService());
+	}
+
+	@Bean
+	@Primary
+	public RestTemplate testRestTemplate() {
+		return Mockito.mock(RestTemplate.class);
 	}
 
 }

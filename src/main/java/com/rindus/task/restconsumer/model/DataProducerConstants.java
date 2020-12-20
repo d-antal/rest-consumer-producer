@@ -8,6 +8,7 @@ public class DataProducerConstants {
 	public final static String RESOURCE_AVAILABLE = "Resource found by id: ";
 	public final static String RESOURCE_LIST_AVAILABLE = "Resource list is available, size : ";
 	public final static String UPDATE_RESOURCE_BY_ID = "Update resource, id: ";
+	public final static String CREATE_RESOURCE = "Create new resource";
 
 	public final static String EXECUTOR_SERVICE_STARTED = "ExecutorService started";
 	public final static String EXECUTOR_SERVICE_STOPPED = "ExecutorService stopped";

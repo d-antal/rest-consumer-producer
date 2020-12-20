@@ -37,19 +37,17 @@ public class PostServiceImpl implements PostService {
 		Post postById = restTemplate.exchange(BASE_URI_POST + id, HttpMethod.GET, new HttpEntity<String>(createHeader()), Post.class).getBody();
 		LOGGER.info(DataProducerConstants.RESOURCE_AVAILABLE + id);
 		return postById;
-
 	}
 
 	public Post createPost(Post post) {
+		LOGGER.info(DataProducerConstants.CREATE_RESOURCE);
 		return restTemplate.exchange(BASE_URI_POST, HttpMethod.POST, new HttpEntity<Post>(post, createHeader()), Post.class).getBody();
-
 	}
 
 	public Post updatePost(Integer id, Post post) throws ResourceNotFoundException {
 		this.getPostById(id);
 		LOGGER.info(DataProducerConstants.UPDATE_RESOURCE_BY_ID + id);
 		return restTemplate.exchange(BASE_URI_POST + id, HttpMethod.PUT, new HttpEntity<Post>(post, createHeader()), Post.class).getBody();
-
 	}
 
 	public Integer deletePost(Integer id) throws ResourceNotFoundException {
@@ -57,7 +55,6 @@ public class PostServiceImpl implements PostService {
 		Integer deletePostId = restTemplate.exchange(BASE_URI_POST + id, HttpMethod.DELETE, new HttpEntity<String>(createHeader()), Post.class).getBody().getId();
 		LOGGER.info(DataProducerConstants.RESOURCE_DELETED + id);
 		return deletePostId;
-
 	}
 
 	private HttpHeaders createHeader() {
