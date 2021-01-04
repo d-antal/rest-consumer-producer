@@ -8,5 +8,4 @@ import com.rindus.task.restconsumer.model.BaseFields;
 public interface DataProducerService {
 
 	List<? extends BaseFields> produceJsonData(List<Integer> idList, BaseFields input) throws ConcurentCallException;
-
 }

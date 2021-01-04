@@ -1,7 +1,5 @@
 package com.rindus.task.restconsumer.exception;
 
-
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

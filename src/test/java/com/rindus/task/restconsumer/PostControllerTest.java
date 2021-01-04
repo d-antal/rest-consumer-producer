@@ -7,12 +7,10 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.rindus.task.restconsumer.controller.PostController;
@@ -33,11 +31,6 @@ public class PostControllerTest {
 	private final static Post POST = Post.builder().id(ID).body("test body").userId(ID).title("test title").build();
 	private final static Post POST_2 = Post.builder().id(ID_2).body("test body2").userId(ID_2).title("test title2").build();
 	private final static List<Post> POST_LIST = Arrays.asList(POST, POST_2);
-
-	@Before
-	public void init() {
-		MockitoAnnotations.initMocks(this);
-	}
 
 	@Test
 	public void testGetAllPosts() {

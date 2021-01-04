@@ -9,16 +9,11 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.rindus.task.restconsumer.controller.DataProducerController;
 import com.rindus.task.restconsumer.exception.ConcurentCallException;
@@ -43,10 +38,6 @@ public class DataProducerControllerTest {
 	private final static List<? extends BaseFields> COMMENT_LIST = Arrays.asList(COMMENT);
 	private final static List<Integer> ID_LIST = Arrays.asList(1);
 
-	@Before
-	public void init() {
-		MockitoAnnotations.initMocks(this);
-	}
 
 	@Test
 	public void testGetAllPosts() throws ConcurentCallException {

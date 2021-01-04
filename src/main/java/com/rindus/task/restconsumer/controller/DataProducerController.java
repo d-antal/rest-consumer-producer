@@ -1,6 +1,7 @@
 package com.rindus.task.restconsumer.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -31,6 +32,7 @@ public class DataProducerController {
 	@PostMapping(path = "/posts/comments", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ConsumedData getPostsWithComments(@Valid @RequestBody List<Integer> idList) throws ConcurentCallException {
 
+		idList= idList.stream().distinct().collect(Collectors.toList());
 		ConsumedData consumedData = new ConsumedData();
 		List<Post> producedPosts = (List<Post>) dataProducerService.produceJsonData(idList, new Post());
 		consumedData.setPosts(producedPosts);

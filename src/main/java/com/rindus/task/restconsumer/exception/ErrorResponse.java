@@ -10,5 +10,5 @@ import lombok.Getter;
 public class ErrorResponse {
 	private Date timestamp;
 	private String message;
-
 }
+
